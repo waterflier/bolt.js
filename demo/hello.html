@@ -1,0 +1,165 @@
+
+<html>
+
+<head>
+<title>hello,h5 bolt!</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+</head>
+<body>
+<script type="text/javascript">
+
+function onClick(canvas){
+    var x = 0;
+    var y = 0;
+    
+}
+    
+var by = function(name,minor){
+    return function(o,p){
+        var a,b;
+        if(o && p && typeof o === 'object' && typeof p ==='object'){
+            a = o[name];
+            b = p[name];
+            if(a === b){
+                return typeof minor === 'function' ? minor(o,p):0;
+            }
+            if(typeof a === typeof b){
+                return a < b ? -1:1;
+            }
+            return typeof a < typeof b ? -1 : 1;
+        }else{
+            thro("error");
+        }
+    }
+}
+    
+function drawImgObj(ctx,obj,rect) {
+    var left = obj.getAttribute("bolt-abs-left");
+    var top = obj.getAttribute("bolt-abs-top");
+    var width = obj.getAttribute("bolt-width");
+    var height = obj.getAttribute("bolt-height");
+    
+    var imgObj = new Image()
+    imgObj.src = obj.getAttribute("bolt-img");
+    
+    ctx.drawImage(document.getElementById("btn-bkg-img"),left,top,width,height);
+
+}
+    
+function drawTextObj(ctx,obj,rect) {
+    var content = obj.getAttribute("bolt-text");
+    var left = obj.getAttribute("bolt-abs-left");
+    var top = obj.getAttribute("bolt-abs-top");
+    
+    ctx.fillText(content,left,top);
+}
+   
+function getObjFromRect(obj,rect){
+    var resultlist = new Array();
+    var left = obj.getAttribute("bolt-abs-left");
+    var top = obj.getAttribute("bolt-abs-top");
+    var width = obj.getAttribute("bolt-width");
+    var height = obj.getAttribute("bolt-height");
+    if(true)
+    {
+        resultlist.push(obj);
+    }
+    
+    for(i=0;i<obj.children.length;++i) {
+        var childElement = obj.children[i] 
+        var childResult = getObjFromRect(childElement,rect);
+        if(childResult.length > 0)
+        {
+            resultlist = resultlist.concat(childResult)
+        }
+    }
+    //document.write("return")
+    return resultlist;
+}
+    
+function render(canvas,objtree,rect){
+    var objlist = getObjFromRect(objtree,rect)
+
+    objlist.sort(by("bolt-abs-zorder"));
+    var ctx = canvas.getContext('2d');
+    ctx.clearRect(rect.left,rect.top,rect.right,rect.bottom);
+    
+    for(i=0;i<objlist.length;++i){
+        var childElement = objlist[i];
+        if(childElement.className == "bolt-img")
+        {
+            drawImgObj(ctx,childElement,rect)
+        }
+        if(childElement.className == "bolt-text")
+        {
+            drawTextObj(ctx,childElement,rect)
+        }
+    }
+}
+
+function hitTest(objtree,x,y){
+}
+
+function updateElementAttrs(element,parentElement){
+    var absleft = parentElement.getAttribute("bolt-abs-left");
+    var abstop = parentElement.getAttribute("bolt-abs-top");
+    var abszorder = parentElement.getAttribute("bolt-abs-zorder");
+    var left = element.getAttribute("bolt-left");
+    left = parseInt(absleft) + parseInt(left);
+    element.setAttribute("bolt-abs-left",left);
+    element.setAttribute("bolt-abs-top",parseInt(abstop)+parseInt(element.getAttribute("bolt-top")));
+    element.setAttribute("bolt-abs-zorder",parseInt(abszorder)+10);
+    
+    for(i=0;i<element.children.length;++i)
+    {
+        updateElementAttrs(element.children[i],element);
+    }
+}
+        
+function initObjTree(objtree){
+    objtree.setAttribute("bolt-abs-left",parseInt(objtree.getAttribute("bolt-left")));
+    objtree.setAttribute("bolt-abs-top",parseInt(objtree.getAttribute("bolt-top")));
+    objtree.setAttribute("bolt-abs-zorder",10);
+    
+    for(i=0;i<objtree.children.length;++i){
+        updateElementAttrs(objtree.children[i],objtree);
+    }
+}
+    
+  
+function onBtnClick(){
+
+}
+</script>    
+    
+<canvas id="base-canvas" width="800" height="600" onclick="onClick">
+    <div>Button Test</div>
+    <div id="btn-bkg" class="bolt-img" bolt-img="img\btn_bkg.png" onbtnclick="onBtnClick" bolt-left="10" bolt-top="10" bolt-height="22" bolt-width="76">
+        <div id="btn-text" class="bolt-text" bolt-text="点我" bolt-left="10" bolt-top="12" bolt-height="18" bolt-width="56">点我</div>
+    </div>
+    <img id="btn-bkg-img" src="img/btn_bkg.png"/>
+</canvas>
+
+<script type="text/javascript">
+
+var canvas = document.getElementById("base-canvas");    
+var rect = {};
+rect.left = 0;
+rect.top = 0;
+rect.right = 800;
+rect.bottom = 600;
+pos = 0;
+setTimeout(function(){
+    pos++;
+    objtree = document.getElementById("btn-bkg");
+    objtree.setAttribute("bolt-left",pos+10);
+    initObjTree(objtree);
+    render(canvas,objtree,rect);
+    setTimeout(arguments.callee, 30);
+},30);
+
+ 
+</script>
+    
+</body>    
+</html>
