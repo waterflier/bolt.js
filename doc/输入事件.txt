@@ -1,0 +1,102 @@
+鼠标事件：
+非常熟悉，不概述
+------------------------------------------------------------------------
+键盘（物理按键）事件：
+非常熟悉，不概述
+-------------------------------------------------------------------------
+多点触摸事件：
+<<iOS>>
+原始事件是 touch begin,touch move,touch end,只有触发了touch begin的对象，才能收到同一个touch object(事件传入)里的后续move,end事件
+对手势的支持：
+1.自己用touch事件识别（难，但灵活），另外也可以通过alltouchs(不懂) 做一些简单的处理
+2.添加一个手势识别对象 （用户可自己扩展）
+http://blog.sina.com.cn/s/blog_9693f61a01017sj1.html
+
+<<HTML5>>
+和iOS类似，但没有手势识别器这样的东西？
+touchstart：触摸开始的时候触发
+
+touchmove：手指在屏幕上滑动的时候触发
+
+touchend：触摸结束的时候触发
+
+而每个触摸事件都包括了三个触摸列表，每个列表里包含了对应的一系列触摸点（用来实现多点触控）：
+
+touches：当前位于屏幕上的所有手指的列表。s
+
+targetTouches：位于当前DOM元素上手指的列表。
+
+changedTouches：涉及当前事件手指的列表。
+
+每个触摸点由包含了如下触摸信息（常用）：
+
+identifier：一个数值，唯一标识触摸会话（touch session）中的当前手指。一般为从0开始的流水号（android4.1，uc）
+
+target：DOM元素，是动作所针对的目标。
+
+pageX/pageX/clientX/clientY/screenX/screenY：一个数值，动作在屏幕上发生的位置（page包含滚动距离,client不包含滚动距离，screen则以屏幕为基准）。　
+
+radiusX/radiusY/rotationAngle：画出大约相当于手指形状的椭圆形，分别为椭圆形的两个半径和旋转角度。初步测试浏览器不支持，好在功能不常用，欢迎大家反馈。
+
+
+<<Android>>
+1.原始touch事件也是 Down，Move,UP这样的结构
+2.对手势的支持
+GestureDetector 
+有如下内置手势的支持
+boolean  onDoubleTap(MotionEvent e) 
+解释：双击的第二下Touch down时触发 
+
+boolean  onDoubleTapEvent(MotionEvent e) 
+解释：双击的第二下Touch down和up都会触发，可用e.getAction()区分。 
+
+boolean  onDown(MotionEvent e) 
+解释：Touch down时触发 
+
+boolean  onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) 
+解释：Touch了滑动一点距离后，up时触发。 
+
+void  onLongPress(MotionEvent e) 
+解释：Touch了不移动一直Touch down时触发 
+
+boolean  onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) 
+解释：Touch了滑动时触发。 
+
+void  onShowPress(MotionEvent e) 
+解释：Touch了还没有滑动时触发 
+【
+与onDown，onLongPress比较 :onDown只要Touch down一定立刻触发。 
+而Touchdown后过一会没有滑动先触发onShowPress再是onLongPress。 
+所以Touchdown后一直不滑动，onDown->onShowPress->onLongPress这个顺序触发。 
+） 
+
+boolean  onSingleTapConfirmed(MotionEvent e) 
+boolean  onSingleTapUp(MotionEvent e) 
+解释：上面这两个函数都是在touch down后又没有滑动（onScroll），又没有长按（onLongPress），然后Touchup时触发。 
+
+点击一下非常快的（不滑动）Touchup： 
+onDown->onSingleTapUp->onSingleTapConfirmed 
+
+点击一下稍微慢点的（不滑动）Touchup： 
+onDown->onShowPress->onSingleTapUp->onSingleTapConfirmed 
+
+自定义手势
+http://www.cnblogs.com/xiaominghimi/archive/2011/01/14/2210872.html
+用户可以通过存储一组有顺序的Path，定义为一个手势
+手势会识别出当前输入与库中所有预存自定义手势的相似度
+-------------------------------------------------------------------------
+画图板+Pen
+基本类似鼠标，多了按压深度的概念（按压深度为负数表示笔悬空）
+不过也许更像touch
+当深度为0时表示接触，然后应该一直有下笔事件，直到提笔
+
+
+
+-------------------------------------------------------------------------
+LeapMotion
+不了解
+
+
+--------------------------------------------------------------------------
+Kinect
+不了解

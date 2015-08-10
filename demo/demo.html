@@ -1,0 +1,63 @@
+<body>
+
+<script type="text/javascript" src="js/math2d.js"></script>
+<script type="text/javascript" src="js/objtree.js"></script>
+<script type="text/javascript" src="js/render.js"></script>
+<script type="text/javascript" src="js/uiobjects.js"></script>
+
+<canvas id="demo-canvas" width="800pt" height="600pt">
+
+</canvas>
+
+<script type="text/javascript" >
+    can = document.getElementById("demo-canvas");
+    mainTree = new ObjTree();
+
+    obj1 = new ImageObject();
+    obj1.setImageByPath("img/btn_bkg.png");
+    obj1.ID = "obj1";
+    obj1.objRealRect.copyFrom(new Rect(0,0,1,0.2));
+
+    obj2 = new ImageObject();
+    obj2.alpha = 0.7;
+    obj2.setImageByPath("img/btn_bkg.png");
+    obj2.objRealRect.copyFrom(new Rect(0.1,0.1,1.1,0.3));
+    obj2.ID = "obj2";
+    obj1.addChild(obj2);
+
+    obj3 = new ImageObject();
+    obj3.ID = "obj3";
+    obj3.alpha = 0.9;
+    obj3.setImageByPath("img/btn_bkg.png");
+    obj3.objRealRect.copyFrom(new Rect(0.2,0.2,1.2,0.4));
+    obj2.addChild(obj3);
+
+    mainTree.getRootObject().addChild(obj1,true);
+
+    ren = new CanvasRender(can,mainTree);
+    viewRect = new Rect(0,0,800,600);
+    ren.render(viewRect);
+    setTimeout(function(){
+        var newAlpha = obj2.alpha + 0.05;
+        if(newAlpha>=1.0){newAlpha=0.0;}
+        obj2.setAlpha(newAlpha);
+
+
+        dirtyRectList = mainTree.getDirtyRectList();
+        if(dirtyRectList)
+        {
+            var len = dirtyRectList.length;
+            for(var i=0;i<len;++i)
+            {
+                if(dirtyRectList[i])
+                {
+                    ren.render(dirtyRectList[i]);
+                }
+            }
+        }
+        setTimeout(arguments.callee, 30);
+    },30);
+
+</script>
+
+</body>

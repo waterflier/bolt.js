@@ -1,7 +1,34 @@
 <html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="target-densitydpi=high-dpi" />
+</head>
 <body>
 
-<canvas id="my-canvas" width="800" height="600"></canvas>    
+<style type="text/css">
+    mytag{
+        width: inherit;
+        height: inherit;
+        margin: 2;
+    }
+
+    mychild{
+        float: left;
+        width: 200pt;
+        height: 20pt;
+    }
+
+</style>
+<canvas id="my-canvas" width="800pt" height="600pt">
+    <mytag>
+        <mychild id="1">abcd</mychild>
+        <mychild id="2"></mychild>
+        <mychild id="3"></mychild>
+        <mychild id="4"></mychild>
+        <mychild id="5"></mychild>
+
+    </mytag>
+</canvas>
 
 <script type="text/javascript">
     var canvas = document.getElementById("my-canvas");
@@ -11,8 +38,15 @@
     img.onload=function () {
         ctx.drawImage(img,0,0);
     }
+
+    ctx.fillText("裙的忠实粉丝！她的街拍，可以作为身材娇小的女生们日常穿搭的教科书哦！一米六的妹子们，赶紧学起来，时髦的中长裙和阔腿裤在向你招手哦！",0,30)
     //ctx.drawImage(img,0,0);
     //ctx.commit();
+    document.write(window.screen.height)
+    document.write("<p>")
+    document.write(window.screen.width)
+    document.write("<p>")
+    document.write(window.screen.deviceXDPI)
 </script>
 </body>
 </html>

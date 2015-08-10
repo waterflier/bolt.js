@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<style type="text/css">
+    #body{
+        max-width: 600px;
+        margin:auto;
+    }
+    
+    #left,#left2,#left3,#left4{
+        float: left;
+        width: 200px;
+        height: inherit;
+        background: cornflowerblue;
+        padding: 20px;
+        margin-right: 20px;
+    }
+    
+    #right{
+        position: fixed;
+        bottom:0;
+        right: 0;
+        width: 200px;
+        height: auto;
+
+    }
+    
+    #left-left{
+        float:left;
+        width: 100px;
+        height: 40px;
+    }
+</style>
+
+<div id="body">
+    <div id="left">
+        <div id="left-left">left.left</div>
+    </div>
+    <div id="left2">left</div>
+    <div id="left3">left</div>
+    <div id="left4">left</div>
+    <div id="right">right</div>
+</div>
+
+<script type="text/javascript">
+    div1 = document.getElementById("right")
+    console.log(div1.offsetLeft)
+
+    div1.onpropertychange = function () {
+        console.log("onpropertychange");
+        console.log(div1.offsetLeft);
+    };
+
+    div1.onresize = function ()
+    {
+        console.log("resize");
+    };
+
+    div1.onmousemove = function ()
+    {
+        console.log("move");
+    };
+
+</script>
+
+</body>
+</html>

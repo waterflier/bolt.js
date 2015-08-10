@@ -1,0 +1,73 @@
+0.最原始的输入事件
+根据电容屏，电阻屏的物理设计特点，可以得到 某一时刻的电阻/电流/电容等纯粹的物理测量值
+
+1.硬件转化
+硬件驱动应该会把上面的和硬件设计强相关的物理值，至少转化为：
+可以知道 一个坐标点(x,y) ，按下的程度。这可以得到一张与屏幕分辩率相同的灰度（或黑白）位图
+
+通过在一定的事件周期里不断扫描这张位图，取出变化的部分，可以得到进一步的事件。(这一步按linux的要求已经在触摸屏的驱动中完成了)
+
+
+2.硬件事件
+
+通过读取触摸屏对应的文件，可以得到以下原始 input_evet
+ 
+Down,Up,Move,事件? （这个处理明显比鼠标难）,Press（长按事件）是否也在其中?
+可以进一步区分出手指？并把事件与手指绑定
+
+3.手势事件
+通过收集一段时间里上一步的各种手指事件，手势识别器分析得出一些常见的时候，并提供扩展接口可以给用户实现自己的手势识别
+系统内置的手势是如何识别的?
+单手指： 轻触?  滑动(可简单的分为上滑，下滑，左滑，右滑)
+双指: 放大+缩小，滑动（同上）,旋转
+三指: 滑动（同上）
+四指: 缩小（抓）这个没法放大，滑动（同上）
+五指:缩小（抓），滑动(同上)
+
+
+=========================
+***********Android自带的手势支持
+
+// 用户轻触触摸屏，尚未松开或拖动，由一个1个MotionEvent ACTION_DOWN触发 
+// 注意和onDown()的区别，强调的是没有松开或者拖动的状态 
+@Override
+public
+void onShowPress(MotionEvent e) {   
+
+}   
+
+// 用户（轻触触摸屏后）松开，由一个1个MotionEvent ACTION_UP触发
+@Override
+public
+boolean onSingleTapUp(MotionEvent e) {    
+}  
+
+// 用户按下触摸屏、快速移动后松开，由1个MotionEvent ACTION_DOWN, 多个ACTION_MOVE, 1个ACTION_UP触发
+ public
+boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,  float velocityY) {   
+}   
+
+// 用户长按触摸屏，由多个MotionEvent ACTION_DOWN触发 
+@Override
+public
+void onLongPress(MotionEvent e) {   
+}   
+
+// 用户按下触摸屏，并拖动，由1个MotionEvent ACTION_DOWN, 多个ACTION_MOVE触发 
+@Override
+public
+boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX,   float distanceY) {   
+}
+
+### Android通过在OnTouch事件里手工把事件传递给GestureDetector来实现手势支持
+************iOS自带的手势支持
+UITapGestureRecognizer
+UIPinchGestureRecognizer
+UIPanGestureRecognizer
+UISwipeGestureRecognizer
+UIRotationGesturerRecognizer
+UILongPressGestureRecognizer
+
+
+###iOS每个view都可以addGestureRecongonizer 来添加手势识别支持
+************HTML5自带的手势支持

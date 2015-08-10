@@ -1,0 +1,16 @@
+#基于全canvas绘制的问题
+1.canvas在osx的高dpi模式下，绘制效果不理想，特别是文本
+2.文本绘制api过于简陋，不支持多行
+3.难以直接支持各种input (要用类似realobject的技术支持？），使用canvas的api来实现input可能会遭遇输入事件不够的问题
+
+
+#css布局的问题
+css对canvas节点下的DOM (shadown DOM)基本上是无效的
+通过offset-xxx属性可以得到css控制布局后的节点的位置属性,但是这些值变化的时候能否得到通知？（比如重新载入了css)
+
+需要更深入的了解css能控制的属性，以及css控制属性生效的时机，来判断是否适合使用。
+css支持表达式位置，但由于嵌入的是完整的js,所以功能很强，但效率很低
+
+position属性，用absolute+relative 似乎能达到bolt的效果
+
+排版冲突问题的解决？
