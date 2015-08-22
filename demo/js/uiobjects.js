@@ -2,10 +2,13 @@
  * Created by waterflier on 11/7/15.
  */
 
+UIOBJECT_HANDLE = 0x1000;
 
 function UIObject(isControl)
 {
     this.ID = "";
+    this._handle = UIOBJECT_HANDLE;
+    UIOBJECT_HANDLE++
 
     this.parentObject = null;
     this.ownerControl = null;
@@ -52,6 +55,11 @@ function UIObject(isControl)
     //其它事件
     this.events = null;
 }
+
+UIObject.prototype.toString = function()
+{
+    return this._handle.toString();
+};
 
 UIObject.prototype.invaildRect = function(dirtyRect)
 {
@@ -305,6 +313,23 @@ UIObject.prototype.getChildrenVisible = function()
 UIObject.prototype.isVisible = function()
 {
     return this.visible & this._parentVisible;
+};
+
+UIObject.prototype.hitTest = function(x,y)
+{
+    return true;
+};
+
+UIObject.prototype.attachListener = function(eventName,func)
+{
+    if(eventName = "OnLButtonUp")
+    {
+        if(this.inputTarget == null)
+        {
+            this.inputTarget = [];
+        }
+        this.inputTarget[INPUT_ACTION_LBUTTON_UP] = func
+    }
 };
 //--------------------------------------------------------------
 
