@@ -1,4 +1,4 @@
-
+﻿
 function CanvasRender(canvas,objtree)
 {
     this.canvas = canvas;

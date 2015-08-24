@@ -1,0 +1,8 @@
+1)最简单的demo (差输入事件支持)
+2)支持动画
+3)支持嵌入"Html Element" (类似realobject) --> html element是否支持renderToCanvas?
+
+
+
+----bug----
+1）最简单的Demo貌似有内存泄露？ js也能写出泄露?

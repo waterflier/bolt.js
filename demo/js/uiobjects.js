@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Created by waterflier on 11/7/15.
  */
 
@@ -8,7 +8,7 @@ function UIObject(isControl)
 {
     this.ID = "";
     this._handle = UIOBJECT_HANDLE;
-    UIOBJECT_HANDLE++
+    UIOBJECT_HANDLE++;
 
     this.parentObject = null;
     this.ownerControl = null;
@@ -61,21 +61,6 @@ UIObject.prototype.toString = function()
     return this._handle.toString();
 };
 
-UIObject.prototype.invaildRect = function(dirtyRect)
-{
-    if(this.ownerTree)
-    {
-        if(dirtyRect)
-        {
-            var realDirtyRect = new Rect(this.objAbsRect.left + dirtyRect.left,this.objAbsRect.top + dirtyRect.top,this.objAbsRect.left + dirtyRect.right,this.objAbsRect.top + dirtyRect.bottom);
-            this.ownerTree.pushDirtyRect(realDirtyRect)
-        }
-        else
-        {
-            this.ownerTree.pushDirtyRect(this.objVisibleRect);
-        }
-    }
-};
 
 UIObject.prototype.getVisibleRect = function()
 {
@@ -85,8 +70,8 @@ UIObject.prototype.getVisibleRect = function()
 UIObject.prototype.setAlpha = function(newAlpha)
 {
     this.alpha = newAlpha;
-    this.invaildRect(null);
-}
+    this.invalidRect(null);
+};
 
 UIObject.prototype.getChild = function(childPath)
 {
@@ -117,7 +102,7 @@ UIObject.prototype.getChildByID = function (childID ) {
         return null;
 
     return this.childrenObjects[childID]
-}
+};
 
 UIObject.prototype.addChild = function(child,isLogicChild)
 {
@@ -320,16 +305,48 @@ UIObject.prototype.hitTest = function(x,y)
     return true;
 };
 
+UIObject.prototype.invalidRect = function(dirtyRect)
+{
+    if(this.ownerTree)
+    {
+        if(dirtyRect)
+        {
+            var realDirtyRect = new Rect(this.objAbsRect.left + dirtyRect.left,this.objAbsRect.top + dirtyRect.top,this.objAbsRect.left + dirtyRect.right,this.objAbsRect.top + dirtyRect.bottom);
+            this.ownerTree.pushDirtyRect(realDirtyRect)
+        }
+        else
+        {
+            this.ownerTree.pushDirtyRect(this.objVisibleRect);
+        }
+    }
+};
+
 UIObject.prototype.attachListener = function(eventName,func)
 {
-    if(eventName = "OnLButtonUp")
+    if(eventName>INPUT_EVENT_BEGIN && eventName<INPUT_EVENT_END)
     {
         if(this.inputTarget == null)
         {
-            this.inputTarget = [];
+            this.inputTarget = new InputTarget();
         }
-        this.inputTarget[INPUT_ACTION_LBUTTON_UP] = func
+
+        return this.inputTarget.attachListener(eventName,func);
     }
+
+    return 0;
+};
+
+UIObject.prototype.removeListener = function(eventName,cookie)
+{
+    if(eventName>INPUT_EVENT_BEGIN && eventName<INPUT_EVENT_END) {
+        if(this.inputTarget == null)
+        {
+            return false;
+        }
+        return this.inputTarget.removeListener(eventName,cookie);
+    }
+
+    return false;
 };
 //--------------------------------------------------------------
 
@@ -409,7 +426,7 @@ ImageObject.prototype.setImageByPath = function(srcPath)
     this.img.src = srcPath;
     var uiobj = this;
     this.img.onload = function () {
-        uiobj.invaildRect(null);
+        uiobj.invalidRect(null);
     }
 };
 

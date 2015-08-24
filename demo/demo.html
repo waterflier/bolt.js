@@ -9,7 +9,7 @@
 
 
 </script>
-<canvas id="demo-canvas" width="800pt" height="600pt" onclick=onCanvasClick>
+<canvas id="demo-canvas" width="800pt" height="600pt">
 
 </canvas>
 
@@ -22,20 +22,20 @@
     obj1.setImageByPath("img/btn_bkg.png");
     obj1.ID = "obj1";
     obj1.objRealRect.copyFrom(new Rect(0,0,1,0.2));
-    obj1.attachListener("OnLButtonUp",function(x,y){console.log("click obj1");});
+    obj1.attachListener(INPUT_ACTION_LBUTTON_UP,function(x,y){console.log("click obj1");});
 
     obj2 = new ImageObject();
     obj2.alpha = 0.7;
     obj2.setImageByPath("img/btn_bkg.png");
     obj2.objRealRect.copyFrom(new Rect(0.1,0.1,1.1,0.3));
     obj2.ID = "obj2";
-    obj2.attachListener("OnLButtonUp",function(x,y){console.log("click obj2");});
+    obj2.attachListener(INPUT_ACTION_LBUTTON_UP,function(x,y){console.log("click obj2");});
     obj1.addChild(obj2);
 
     obj3 = new ImageObject();
     obj3.ID = "obj3";
     obj3.alpha = 0.9;
-    obj3.attachListener("OnLButtonUp",function(x,y){console.log("click obj3");});
+    obj3.attachListener(INPUT_ACTION_LBUTTON_UP,function(x,y){console.log("click obj3");});
     obj3.setImageByPath("img/btn_bkg.png");
     obj3.objRealRect.copyFrom(new Rect(0.2,0.2,1.2,0.4));
     obj2.addChild(obj3);
